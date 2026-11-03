@@ -1,0 +1,77 @@
+eval:
+  data_path: data/brats2023_distribution.json
+  eval_interval: 2500
+  eval_model: false
+  metrics:
+  - rfid
+  - psnr
+  - ssim
+  - is
+gan:
+  disc:
+    arch:
+      dino_ckpt_path: models/discs/dino_vit_small_patch8_224.pth
+      ks: 9
+      norm_type: bn
+      recipe: S_8
+      using_spec_norm: true
+    augment:
+      cutout: 0.0
+      prob: 1.0
+    optimizer:
+      betas:
+      - 0.9
+      - 0.95
+      lr: 0.0002
+      weight_decay: 0.0
+    scheduler:
+      base_lr: 0.0002
+      decay_end_epoch: 50
+      final_lr: 2.0e-05
+      type: cosine
+      warmup_epochs: 1
+      warmup_from_zero: true
+  loss:
+    disc_loss: hinge
+    disc_start: 100
+    disc_upd_start: 100
+    disc_updates: 1
+    disc_weight: 0.75
+    gen_loss: vanilla
+    lpips_start: 0
+    max_d_weight: 10000.0
+    perceptual_weight: 1.0
+stage_1:
+  params:
+    decoder_config_path: configs/decoder/ViTG
+    encoder_cls: Dinov2withNorm
+    encoder_config_path: facebook/dinov2-with-registers-base
+    encoder_input_size: 224
+    encoder_params:
+      dinov2_path: facebook/dinov2-with-registers-base
+      normalize: true
+    noise_tau: 0.8
+    reshape_to_2d: true
+  target: stage1.RAE
+training:
+  checkpoint_interval: 1
+  clip_grad: 0.0
+  ema_decay: 0.9978
+  epochs: 50
+  global_batch_size: 256
+  log_interval: 100
+  num_workers: 8
+  optimizer:
+    betas:
+    - 0.9
+    - 0.95
+    lr: 0.0002
+    weight_decay: 0.0
+  sample_every: 2500
+  scheduler:
+    base_lr: 0.0002
+    decay_end_epoch: 50
+    final_lr: 2.0e-05
+    type: cosine
+    warmup_epochs: 1
+    warmup_from_zero: true

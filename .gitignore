@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# data / weights / runs
+/data/*.json
+/datasets/
+/raw_data/
+/outputs/
+/checkpoints/*
+!/checkpoints/README.md
+/models/
+/results/
+downstream/src/runs/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.npz
+*.npy
+
+# logging
+wandb/
+swanlog/
+swanlab/
+*.log

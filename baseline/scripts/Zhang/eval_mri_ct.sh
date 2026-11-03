@@ -1,0 +1,20 @@
+#!/bin/bash
+# Zhang et al. (TMI 2024), re-implemented: evaluate an MRI<->CT checkpoint (CT->MRI and MRI->CT) with
+# test_mri_ct.py; writes test_results_Zhang.json to LOG_BASE/Zhang.
+# env: sphereflow_baseline
+# in : CHECKPOINT_PATH (default: $CKPT_DIR/baselines/mri_ct/Zhang.pt)
+set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/../../../scripts/env.sh"
+cd "$REPO_DIR"
+CHECKPOINT_PATH="${CHECKPOINT_PATH:-$CKPT_DIR/baselines/mri_ct/Zhang.pt}"
+LOG_BASE="${LOG_BASE:-$OUTPUT_DIR/eval/baselines_mri_ct}"
+require_file "$MRICT_JSON" "$CHECKPOINT_PATH"
+mkdir -p "$LOG_BASE"
+accelerate launch --multi_gpu --num_processes "$NPROC" --gpu_ids "$GPUS" --main_process_port "${MASTER_PORT:-29530}" \
+    baseline/src/test_mri_ct.py \
+    --model_type Zhang \
+    --data_json "$MRICT_JSON" \
+    --logdir "$LOG_BASE" \
+    --batch_size 32 --workers 4 --max_epochs 150 \
+    --optim_lr 2e-4 --d_lr 2e-4 --decay 1e-4 --eta_min 1e-6 --val_every 5 --sample_every 500 \
+    --checkpoint_path "$CHECKPOINT_PATH"
