@@ -1,6 +1,8 @@
 # SphereFlow: Missing Modality Imputation via Geometric Transport on Hypersphere
 by Huihan Wang\*, Juncheng Wang\*, Yuxiang Feng, Wenlong Hou, Guoqi Yu, Chao Xu, Yang Liu, Baigui Sun, and Shujun Wang†.
 
+[[Paper](https://arxiv.org/abs/2611.04414)] [[Weights & Data](https://huggingface.co/WTHH031230/SphereFlow)]
+
 ### Introduction
 
 This repository is for our NeurIPS 2026 paper: "SphereFlow: Missing Modality Imputation via Geometric Transport on Hypersphere". This work imputes missing modalities by transporting frozen DINOv2 latents on the hypersphere, evaluated on BraTS 2023 (MRI) and SynthRAD2023 (MRI ↔ CT).
